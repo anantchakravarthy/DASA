@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Appointment List{% endblock %}
+
+
+
+{% block content %}
+
+    <section class="dentist-area section-padding-40-0">
+
+    <div class="container">
+
+
+      <div class="row">
+
+        <!-- Section Heading -->
+        <div class="col-12">
+          <div class="section-heading text-center">
+
+
+            <h3>{{ request.user.first_name }}'s Appointment's</h3>
+            <div class="line"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+          {% for apt in appointment %}
+        <!-- Single Dentist Area -->
+        <div class="col-12 col-sm-6 col-md-4">
+
+          <div class="single-dentist-area mb-100">
+            <img  style="height: 500px; width: 600px" src="{{ apt.image.url }}" alt="">
+            <!-- Dentist Content -->
+            <div class="dentist-content">
+              <!-- Social Info -->
+              <div class="dentist-social-info">
+
+              </div>
+              <!-- Dentist Info -->
+              <!-- if logged in user is dentist -->
+              {% if request.user.is_authenticated and request.user.role == 'patient' %}
+              <div class="dentist-info bg-gradient-overlay">
+                <h5>Dentist: {{apt.dentist.first_name }}</h5>
+                <p>Reason: {{ apt.reason }}</p>
+                <p>Message: {{ apt.message }}</p>
+                  <p>ON {{ apt.date }}</p>
+                  <p>FROM {{ apt.start_time }} TO {{ apt.end_time }}</p>
+                  <p>
+                      <i class="fa fa-trash-o" style="color: red" aria-hidden="true"></i>
+                      <a href="{% url 'appointment:delete-appointment' apt.id %}">Delete Appointment</a>
+                      <i class="fa fa-eye" style="color: blue" aria-hidden="true"></i>
+                      <a href="{% url 'appointment:view-logs' apt.id %}">View Logs</a> 
+                  </p>
+              </div>
+
+              <!-- if logged in user is patient -->
+              {% elif request.user.is_authenticated and request.user.role == 'dentist' %}
+              <div class="dentist-info bg-gradient-overlay">
+                <h5>Patient: {{apt.user.first_name }}</h5>
+                <p>Reason: {{ apt.reason }}</p>
+                <p>Message: {{ apt.message }}</p>
+                <p>ON {{ apt.date }}</p>
+                <p>FROM {{ apt.start_time }} TO {{ apt.end_time }}</p>
+                <p>
+                  <i class="fa fa-trash-o" style="color: red" aria-hidden="true"></i>
+                  <a href="{% url 'appointment:delete-appointment' apt.id %}">Delete Appointment</a>
+                </p>
+                <p>
+                  <i class="fa fa-plus" style="color: green" aria-hidden="true"></i>
+                  <a href="{% url 'appointment:create-log' apt.id %}">Add Log</a>
+                  <i class="fa fa-eye" style="color: blue" aria-hidden="true"></i>
+                  <a href="{% url 'appointment:view-logs' apt.id %}">View Logs</a> 
+                </p>
+              </div>
+
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+
+      </div>
+    </div>
+  </section>
+
+{% endblock %}

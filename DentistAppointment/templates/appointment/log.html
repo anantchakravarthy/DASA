@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Appointment List{% endblock %}
+
+
+
+{% block content %}
+
+    <section class="dentist-area section-padding-40-0">
+
+    <div class="container">
+
+      <div class="row">
+          {% for log in dentistlog %}
+              <div class="dentist-info bg-gradient-overlay mx-3 single-dentist-area mb-100 p-5">
+                <h5>Patient: {{log.appointment.user.first_name }}</h5>
+                <p>Reason: {{ log.appointment.reason }}</p>
+                <p>Message: {{ log.appointment.message }}</p>
+                <h5>Consultation Details</h5>
+                <p>Consulted On {{ log.consultation_date }}</p>
+                <p>Consultation Duration{{ log.consultation_duration }}</p>
+                <p>Details: {{ log.consultation_details }}</p>
+              </div>
+      {% endfor %}
+      </div>
+
+    </div>
+  </section>
+
+{% endblock %}
